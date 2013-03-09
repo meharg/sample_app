@@ -1,0 +1,80 @@
+[33mcommit e4c475ed67d0eee63ed57bec1a8010bf092a8d3a[m
+Author: David Meharg <david@fiercelink.com>
+Date:   Fri Mar 8 10:20:06 2013 -0600
+
+    Section 5.6 exercise improve tests
+
+[1mdiff --git a/spec/requests/static_pages_spec.rb b/spec/requests/static_pages_spec.rb[m
+[1mindex 3a839bf..bb3f72a 100644[m
+[1m--- a/spec/requests/static_pages_spec.rb[m
+[1m+++ b/spec/requests/static_pages_spec.rb[m
+[36m@@ -6,34 +6,56 @@[m [mdescribe "Static pages" do[m
+ [m
+   subject { page }[m
+ [m
+[32m+[m[32m  shared_examples_for "all static pages" do[m
+[32m+[m[32m    it { should have_selector('h1',    text: heading) }[m
+[32m+[m[32m    it { should have_selector('title', text: full_title(page_title)) }[m
+[32m+[m[32m  end[m
+[32m+[m
+   describe "Home page" do[m
+     before { visit root_path } [m
+[32m+[m[32m    let(:heading)    { 'Sample App' }[m
+[32m+[m[32m    let(:page_title) { '' }[m
+ [m
+[31m-    it { should have_selector('h1', :text => 'Sample App') }[m
+[31m-    it { should have_selector('title',[m
+[31m-                        :text => "#{base_title}") }[m
+[32m+[m[32m    it_should_behave_like "all static pages"[m
+     it { should_not have_selector('title',:text => '| Home') }[m
+   end[m
+ [m
+   describe "Help page" do[m
+     before { visit help_path }[m
+[31m-    it { should have_selector('h1', :text => 'Help') }[m
+[31m-    it { should have_selector('title',[m
+[31m-                        :text => "#{base_title} | Help") }[m
+[32m+[m[32m    let(:heading)    { 'Help' }[m
+[32m+[m[32m    let(:page_title) { heading }[m
+[32m+[m
+[32m+[m[32m    it_should_behave_like "all static pages"[m
+   end[m
+ [m
+   describe "About page" do[m
+     before { visit about_path }[m
+[31m-    it { should have_selector('h1', :text => 'About Us') }[m
+[31m-    it { should have_selector('title',[m
+[31m-                    :text => "#{base_title} | About Us") }[m
+[32m+[m[32m    let(:heading)    { 'About Us' }[m
+[32m+[m[32m    let(:page_title) { heading }[m
+[32m+[m
+[32m+[m[32m    it_should_behave_like "all static pages"[m
+   end[m
+ [m
+   describe "Contacts page" do[m
+     before { visit contact_path }[m
+[31m-    it { should have_selector('h1', :text => 'Contact Us') }[m
+[31m-    it { should have_selector('title',[m
+[31m-                    :text => "#{base_title} | Contact Us") }[m
+[32m+[m[32m    let(:heading)    { 'Contact Us' }[m
+[32m+[m[32m    let(:page_title) { heading }[m
+[32m+[m
+[32m+[m[32m    it_should_behave_like "all static pages"[m
+   end[m
+ [m
+[32m+[m[32m  it "should have the right links on the layout" do[m
+[32m+[m[32m    visit root_path[m
+[32m+[m[32m    click_link "About"[m
+[32m+[m[32m    page.should have_selector 'title', text: full_title('About Us')[m
+[32m+[m[32m    click_link "Help"[m
+[32m+[m[32m    page.should have_selector 'title', text: full_title('Help')[m
+[32m+[m[32m    click_link "Contact"[m
+[32m+[m[32m    page.should have_selector 'title', text: full_title('Contact Us')[m
+[32m+[m[32m    click_link "Home"[m
+[32m+[m[32m    click_link "Sign up now!"[m
+[32m+[m[32m    page.should have_selector 'title', text: full_title('Sign up')[m
+[32m+[m[32m    click_link "sample app"[m
+[32m+[m[32m    page.should have_selector 'title', text: full_title('')[m
+[32m+[m[32m  end[m
+ end[m
+\ No newline at end of file[m
