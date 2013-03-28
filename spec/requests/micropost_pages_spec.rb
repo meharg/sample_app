@@ -42,4 +42,20 @@ describe "Micropost pages" do
       end
     end
   end
+
+  describe "micropost counts" do
+    describe "zero microposts" do
+      before { visit root_path }
+
+      it { should have_content('0 microposts') }
+    end
+
+    before { FactoryGirl.create(:micropost, user: user) }
+
+    describe "1 micropost" do
+      before { visit root_path }
+
+      it { should have_content('1 micropost') }
+    end
+  end
 end
